@@ -1,8 +1,21 @@
 import React from 'react'
-import { Link, graphql } from 'gatsby'
+import { Link, graphql, useStaticQuery } from 'gatsby'
 import Layout from '../components/layout'
 
-const Template = ({ data }) => {
+const Template = () => {
+  const data = useStaticQuery(graphql`
+    query BlogPostByPath($path: String!) {
+      markdownRemark(frontmatter: { path: { eq: $path }}) {
+      html
+      frontmatter {
+        path
+        title
+        author
+        date
+      }
+      }
+    }
+  `)
   const post = data.markdownRemark
 
   console.dir(post.html)
@@ -18,19 +31,19 @@ const Template = ({ data }) => {
   )
 }
 
-// NOTE this is the non-hooks way
-export const postQuery = graphql`
-  query BlogPostByPath($path: String!) {
-    markdownRemark(frontmatter: { path: { eq: $path }}) {
-     html
-     frontmatter {
-       path
-       title
-       author
-       date
-     }
-    }
-  }
-`
+// // NOTE this is the non-hooks way
+// export const postQuery = graphql`
+//   query BlogPostByPath($path: String!) {
+//     markdownRemark(frontmatter: { path: { eq: $path }}) {
+//      html
+//      frontmatter {
+//        path
+//        title
+//        author
+//        date
+//      }
+//     }
+//   }
+// `
 
 export default Template;
