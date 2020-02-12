@@ -2,24 +2,8 @@ import React from 'react'
 import { Link, graphql, useStaticQuery } from 'gatsby'
 import Layout from '../components/layout'
 
-const Template = () => {
-  const data = useStaticQuery(graphql`
-    query BlogPostByPath($path: String!) {
-      markdownRemark(frontmatter: { path: { eq: $path }}) {
-      html
-      frontmatter {
-        path
-        title
-        author
-        date
-      }
-      }
-    }
-  `)
+const Template = ({ data }) => {
   const post = data.markdownRemark
-
-  console.dir(post.html)
-  // FIXME Not XSS safe
   return (
     <Layout>
       <Link to='/blog'>Go back to blogs</Link>
@@ -31,19 +15,18 @@ const Template = () => {
   )
 }
 
-// // NOTE this is the non-hooks way
-// export const postQuery = graphql`
-//   query BlogPostByPath($path: String!) {
-//     markdownRemark(frontmatter: { path: { eq: $path }}) {
-//      html
-//      frontmatter {
-//        path
-//        title
-//        author
-//        date
-//      }
-//     }
-//   }
-// `
+export const postQuery = graphql`
+  query BlogPostByPath($path: String!) {
+    markdownRemark(frontmatter: { path: { eq: $path }}) {
+     html
+     frontmatter {
+       path
+       title
+       author
+       date
+     }
+    }
+  }
+`
 
 export default Template;
